@@ -7,45 +7,60 @@ require_once("../auth/config.php");
 function link_database(){
   $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
   mysql_select_db(DBNAME);
-
-
-
 }
 
-$community = $_POST["community"].$_POST["community1"].$_POST["community2"].$_POST["community3"];
-$str = $community;
-$key = "y1ubASctsW8CsOkmYALaW";
+
+function getConnunityCode(){
+  $community_isset = isset($_POST['community']) and isset($_POST['community1']) and isset($_POST['community2']) and isset($_POST['community3']);
+  $community_isset2 = isset($_POST['community_code']);
+  if($community_isset)
+  {
+    $community_code = $_POST["community"].$_POST["community1"].$_POST["community2"].$_POST["community3"];
+  }else {
+    if($community_isset2) {
+      $community_code = $_POST['community_code'];
+
+    }else {
+
+      return "0";
+    }
+  }
+  return $community_code;
+
+};
+
+// $community_code = $_POST["community"].$_POST["community1"].$_POST["community2"].$_POST["community3"];
+$community_code = getConnunityCode();
+$str = $community_code;
+if (isset($_POST['user-key'])) {
+  $key = $_POST["user-key"];
+}else {
+  $key = "ejbbvCjK6qNexmD";
+}
+
 $act = "ENCODE";
 
 $code = authcode($str,$act,$key,81000);
 
 $community_add = array(
-  "community" => $community,
+  "community_code" => $community_code,
   "authcode" => $code
 );
 // json格式输出
 echo json_encode($community_add);
-echo "\n";
-$hash = password_hash("rasmuslerdorf", PASSWORD_DEFAULT);
-echo $hash."\n";
 
-$gethash = '$2y$10$FQVo2BzZ29ejbbvCjK6qNexmDKnZQD.ty2ey8h30Kmip8jctF.0Zu';
 
-if (password_verify('rasmuslerdorf', $gethash)) {
-    echo 'Password is valid!';
-} else {
-    echo 'Invalid password.';
-}
+// echo "\n";
+// $hash = password_hash("rasmuslerdorf", PASSWORD_DEFAULT);
+// echo $hash."\n";
+//
+// $gethash = '$2y$10$FQVo2BzZ29ejbbvCjK6qNexmDKnZQD.ty2ey8h30Kmip8jctF.0Zu';
+//
+// if (password_verify('rasmuslerdorf', $gethash)) {
+//     echo 'Password is valid!';
+// } else {
+//     echo 'Invalid password.';
+// }
 
 
  ?>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <img src="http://qr.liantu.com/api.php?bg=ffffff&fg=92b37b&gc=1751a9&el=l&w=200&m=10&text=<?php echo $code;  ?>"/>
-  </body>
-</html>

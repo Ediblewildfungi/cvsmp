@@ -1,13 +1,50 @@
 <?php
 
 # $link_id = mysql_connect($DBHOST,$DBUSER,$DBPWD);
+require_once("../auth/config.php");
+
+function link_database(){
+  $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
+  mysql_select_db(DBNAME);
+}
 
 function checkCookieAndSession (){
-  if(isset($_COOKIE['username'])&&isset($_COOKOE['password'])){
+  $username = $_COOKIE['username'];
+  if(isset($_COOKIE['username'])){
+    return  "1";
+  //  echo '<script>console.log("登录1")</script>';
+
   }else {
     # code...
+    echo "<script>location.href='login.html';</script>";
+    return  "0";
+  //  echo '<script>console.log("登录2")</script>';
+    # echo "<script>location.href='login.html';</script>";
+
   }
 }
+checkCookieAndSession();
+if (checkCookieAndSession()==1) {
+  link_database();
+  $username = $_COOKIE['username'];
+  $sql = "select * from user where USERNAME = '$username'";
+  $name2 = mysql_query($sql);
+  $row = mysql_fetch_array($name2);
+
+  $userid = $row["UID"] ;
+  $userkey = $row["USER_KEY"] ;
+  $user_group = $row["USER_GROUP"] ;
+
+  $sql = "select * from user_info where UID = '$userid'";
+  $name2 = mysql_query($sql);
+  $row = mysql_fetch_array($name2);
+  $address = $row["ADDRESS"] ;
+  $user_times = $row["USER_CONF1"] ;
+
+  mysql_close();
+}
+//echo checkCookieAndSession();
+
 
  ?>
 <!DOCTYPE html>
@@ -239,7 +276,7 @@ function checkCookieAndSession (){
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="img/avatar1_small.jpg" alt="">
-                <span class="username">系统管理员</span> <b class="caret"></b>
+                <span class="username"><?php echo $_COOKIE['username']; ?></span> <b class="caret"></b>
               </a>
               <ul class="dropdown-menu extended logout">
                 <li><a href="#"><i class="icon-user"></i>我的资料</a></li>
@@ -343,16 +380,228 @@ function checkCookieAndSession (){
       </div>
     </div>
     <div id="main-content">
-      <!-- <div style="display: block; height: 1000px;" id="gidgroupworkpages" name="tabDiv"><iframe style="width: 100%; height: 100%" id="gidgroupworkpagesFrame" frameSpacing="0" marginHeight="0" src="http://www.baidu.com/" frameBorder="no" name="gidgroupworkpagesFrame" marginWidth="0"></iframe></div> -->
-      test
-      <?php
-      $username = $_POST['username'];
-      $password = $_POST['password'];
-      echo $username ;
+      <div class="container-fluid">
+        <!-- <div style="display: block; height: 1000px;" id="gidgroupworkpages" name="tabDiv"><iframe style="width: 100%; height: 100%" id="gidgroupworkpagesFrame" frameSpacing="0" marginHeight="0" src="http://www.baidu.com/" frameBorder="no" name="gidgroupworkpagesFrame" marginWidth="0"></iframe></div> -->
+        <?php
 
-       ?>
+        // $username = $_POST['username'];
+        // $user_password = $_POST['user_password'];
+        // echo "欢迎"."\n" ;
+        // echo $username."\n" ;
+        // echo "登录本系统"."\n" ;
+        //echo $_COOKIE["username"];
+
+
+         ?>
+         <!-- BEGIN PAGE HEADER-->
+         <div class="row-fluid">
+            <div class="span12">
+                <!-- BEGIN THEME CUSTOMIZER-->
+                <div id="theme-change" class="hidden-phone">
+                    <i class="icon-cogs"></i>
+                     <span class="settings">
+                         <span class="text">Theme Color:</span>
+                         <span class="colors">
+                             <span class="color-default" data-style="default"></span>
+                             <span class="color-green" data-style="green"></span>
+                             <span class="color-gray" data-style="gray"></span>
+                             <span class="color-purple" data-style="purple"></span>
+                             <span class="color-red" data-style="red"></span>
+                         </span>
+                     </span>
+                </div>
+                <!-- END THEME CUSTOMIZER-->
+               <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="page-title">
+                  控制台
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">访客管理系统</a>
+                        <span class="divider">/</span>
+                    </li>
+                    <li>
+                        <a href="#">控制台</a>
+                        <span class="divider">/</span>
+                    </li>
+                    <li class="active">
+                        访客管理
+                    </li>
+                    <!-- <li class="pull-right search-wrap">
+                        <form action="search_result.html" class="hidden-phone">
+                            <div class="input-append search-input-area">
+                                <input class="" id="appendedInputButton" type="text">
+                                <button class="btn" type="button"><i class="icon-search"></i> </button>
+                            </div>
+                        </form>
+                    </li> -->
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+         </div>
+         <!-- END PAGE HEADER-->
+         <!-- BEGIN 界面1 PORTLET-->
+         <div class="widget orange">
+             <div class="widget-title">
+                 <h4><i class="icon-info"></i> 注意事项</h4>
+                 <span class="tools">
+                 <a href="javascript:;" class="icon-chevron-down"></a>
+                 <a href="javascript:;" class="icon-remove"></a>
+                 </span>
+             </div>
+             <div class="widget-body">
+                 <div class="alert alert-success">
+                     <button class="close" data-dismiss="alert">×</button>
+                     <strong>登录成功!</strong> <?php echo $_COOKIE["username"]; ?>，欢迎光临访客管理系统！
+                 </div>
+                 <div class="alert">
+                     <button class="close" data-dismiss="alert">×</button>
+                     <strong>注意!</strong> 管理员登记过程请注意规范！
+                 </div>
+
+
+
+
+             </div>
+         </div>
+         <!-- END 界面1 PORTLET-->
+
+         <div class="row-fluid">
+             <div class="span12">
+                 <!-- BEGIN SAMPLE FORMPORTLET-->
+                 <div class="widget green">
+                     <div class="widget-title">
+                         <h4><i class="icon-unlock-alt"></i> 生成来访者key</h4>
+                         <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                         <a href="javascript:;" class="icon-remove"></a>
+                         </span>
+                     </div>
+                     <div class="widget-body">
+                         <!-- BEGIN FORM-->
+                         <form id="get-visitor-key"  class="form-horizontal" method="post">
+
+                             <div class="control-group">
+                                 <label class="control-label">您的姓名</label>
+                                 <div class="controls">
+                                     <input type="text" placeholder="<?php  echo $_COOKIE["username"]; ?>" class="input-large" disabled/>
+                                     <span class="help-inline">*</span>
+                                 </div>
+                             </div>
+                             <div class="control-group">
+                                 <label name="community-code" class="control-label">您的地址码</label>
+                                 <div class="controls">
+                                     <input type="text" placeholder="<?php echo "$address";  ?>" class="input-xlarge" disabled/>
+                                     <span class="help-inline">*</span>
+                                 </div>
+                             </div>
+                             <div class="control-group">
+                                 <label class="control-label">您的原始key</label>
+                                 <div class="controls">
+                                     <input type="text" name="user-key" value="<?php   echo "$userkey"; ?> " class="input-xxlarge" disabled/>
+                                     <span class="help-inline">*您的私有密钥</span>
+                                 </div>
+                             </div>
+                             <div class="control-group">
+                                 <label id="test01"  class="control-label">您生成的访客key</label>
+                                 <div class="controls">
+                                     <input id="visitor-key" type="text" placeholder="请点击提交来生成" class="input-xxlarge" />
+
+                                     <!-- <input type="text" id="visitor-key" value="Mickey Mouse"> -->
+                                     <span class="help-inline">您本周还有 <?php echo "$user_times"; ?> 次 生成机会</span>
+                                 </div>
+                             </div>
+                             <div class="alert alert-info">
+                                 <button class="close" data-dismiss="alert">×</button>
+                                 <strong>提示</strong> 请点击提交来生成访客key，以便用于分享。
+                             </div>
+                             <div class="alert alert-error">
+                                 <button class="close" data-dismiss="alert">×</button>
+                                 <strong>警告!</strong> 您输入的信息有误。
+                             </div>
+                             <div id="visirot-QR-code" class="visirot-QR-code"></div>
+                             <div class="form-actions">
+                                 <button id="get-visitor-key-button" type="button" class="btn blue"><i class="icon-ok"></i> 提交</button>
+                                 <button type="button" class="btn"><i class=" icon-remove"></i> x</button>
+                             </div>
+                         </form>
+                         <!-- END FORM-->
+                     </div>
+                 </div>
+                 <!-- END SAMPLE FORM PORTLET-->
+             </div>
+         </div>
+        <!--  管理员可见 部分 START-->
+        <?php if( $user_group == 0 ) : ?>
+         <div class="row-fluid">
+             <div class="span12">
+                 <!-- BEGIN SAMPLE FORMPORTLET-->
+                 <div class="widget green">
+                     <div class="widget-title">
+                         <h4><i class=" icon-key"></i> 登记新用户</h4>
+                         <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                         <a href="javascript:;" class="icon-remove"></a>
+                         </span>
+                     </div>
+                     <div class="widget-body">
+                         <!-- BEGIN FORM-->
+                         <form action="#" class="form-horizontal">
+
+                             <div class="control-group">
+                                 <label class="control-label">姓名</label>
+                                 <div class="controls">
+                                     <input type="text" placeholder="输新入住用户的姓名。" class="input-large" />
+                                     <span class="help-inline">*输新入住用户的姓名。</span>
+                                 </div>
+                             </div>
+                             <div class="control-group">
+                                 <label class="control-label">设置密码</label>
+                                 <div class="controls">
+                                     <input type="text" placeholder="输新入住用户的初始密码。" class="input-xlarge" />
+                                     <span class="help-inline">*输新入住用户的初始密码。</span>
+                                 </div>
+                             </div>
+                             <div class="control-group">
+                                 <label class="control-label">授权码</label>
+                                 <div class="controls">
+                                     <input type="text" placeholder="输入管理员的授权码" class="input-xxlarge" />
+                                     <span class="help-inline">*输入管理员的授权码。</span>
+                                 </div>
+                             </div>
+                             <div class="control-group">
+                                 <label class="control-label">指定入住用户的小区</label>
+                                 <div class="controls">
+                                     <select class="input-large m-wrap" tabindex="1">
+                                         <option value="Category 1">某某大学</option>
+                                         <option value="Category 2">某某新区</option>
+                                         <option value="Category 3">某某花园</option>
+                                         <option value="Category 4">某某学院</option>
+                                     </select>
+                                 </div>
+                             </div>
+                             <div class="alert alert-error">
+                                 <button class="close" data-dismiss="alert">×</button>
+                                 <strong>警告!</strong> 您输入的授权码有误。
+                             </div>
+                             <div class="form-actions">
+                                 <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
+                                 <button type="button" class="btn"><i class=" icon-remove"></i> x</button>
+                             </div>
+                         </form>
+                         <!-- END FORM-->
+                     </div>
+                 </div>
+                 <!-- END SAMPLE FORM PORTLET-->
+             </div>
+         </div>
+        <?php endif; ?>
+       <!-- 管理员可见 部分  END-->
+
+      </div>
+
   </div>
-  <div id="footer">
+  <!-- <div id="footer">
     <div class="obtnbox">
       <a class="obtn xfi_1" href="#">图</a>
       <a class="obtn xfi_2 active" href="#">图</a>
@@ -379,7 +628,7 @@ function checkCookieAndSession (){
         <a class="oitem" href="#"><i class="xic">&times;</i>个人信息</a>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- BEGIN JAVASCRIPTS -->
   <!-- Load javascripts at bottom, this will reduce page load time -->
@@ -402,7 +651,20 @@ function checkCookieAndSession (){
 
   <!--common script for all pages-->
   <script src="js/common-scripts.js"></script>
-
+  <script type="text/javascript">
+  $(document).ready(
+    function(){
+       $("#get-visitor-key-button").click(function(){
+           $.post("../request/getpost.php", $("#get-visitor-key").serialize());
+           $.post("../request/getpost.php", function(data) {
+             alert("Data Loaded: " + data);
+           });
+           $("#visirot-QR-code").html("<img src='http://qr.liantu.com/api.php?bg=ffffff&fg=92b37b&gc=1751a9&el=l&w=200&m=10&text=sacxac-xsaE'/>");
+           $("#visitor-key").val("DollyDuck");
+       })
+    }
+  );
+  </script>
   <!--script for this page only-->
   <!-- END JAVASCRIPTS -->
 </body>
