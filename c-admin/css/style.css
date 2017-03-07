@@ -2357,8 +2357,12 @@ ul.icons {
 
 
 /*lock page*/
-body.lock {
-    background: #393939;
+body {
+    /*background: #393939;*/
+    background:  url(../image/bg.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+
 }
 
 .lock-header {
@@ -4591,5 +4595,3 @@ margin-right: 21px;
 .d-sel-filter span {
     margin-right: 10px;
 }
-
-

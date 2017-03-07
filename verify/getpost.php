@@ -3,9 +3,9 @@
 include '../auth/auth.php';
 
 $verfiy_coede = $_POST["verfiy_coede"];
-
+$verfiy_key = $_POST["verfiy_key"];
 $str  = $verfiy_coede;
-$key  = "y1ubASctsW8CsOkmYALaW";
+$key  = $verfiy_key;
 $act  = "DECODE";
 $code = authcode($str,$act,$key,100);
 

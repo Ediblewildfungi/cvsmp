@@ -479,26 +479,26 @@ if (checkCookieAndSession()==1) {
                      </div>
                      <div class="widget-body">
                          <!-- BEGIN FORM-->
-                         <form id="get-visitor-key"  class="form-horizontal" method="post">
+                         <form id="get-visitor-key" action="../request/getpost.php"  class="form-horizontal" method="post">
 
                              <div class="control-group">
                                  <label class="control-label">您的姓名</label>
                                  <div class="controls">
-                                     <input type="text" placeholder="<?php  echo $_COOKIE["username"]; ?>" class="input-large" disabled/>
-                                     <span class="help-inline">*</span>
+                                     <input type="text" placeholder="<?php  echo $_COOKIE["username"]; ?>" class="input-large" readonly="readonly"/>
+
                                  </div>
                              </div>
                              <div class="control-group">
-                                 <label name="community-code" class="control-label">您的地址码</label>
+                                 <label  class="control-label">您的地址码</label>
                                  <div class="controls">
-                                     <input type="text" placeholder="<?php echo "$address";  ?>" class="input-xlarge" disabled/>
-                                     <span class="help-inline">*</span>
+                                     <input name="community_code" type="text" value="<?php echo "$address"; ?>" class="input-xlarge" readonly="readonly"/>
+
                                  </div>
                              </div>
                              <div class="control-group">
                                  <label class="control-label">您的原始key</label>
                                  <div class="controls">
-                                     <input type="text" name="user-key" value="<?php   echo "$userkey"; ?> " class="input-xxlarge" disabled/>
+                                     <input type="text" name="user-key" value="<?php echo "$userkey"; ?> " class="input-xxlarge" readonly="readonly"/>
                                      <span class="help-inline">*您的私有密钥</span>
                                  </div>
                              </div>
@@ -515,14 +515,14 @@ if (checkCookieAndSession()==1) {
                                  <button class="close" data-dismiss="alert">×</button>
                                  <strong>提示</strong> 请点击提交来生成访客key，以便用于分享。
                              </div>
-                             <div class="alert alert-error">
+                             <!-- <div class="alert alert-error">
                                  <button class="close" data-dismiss="alert">×</button>
                                  <strong>警告!</strong> 您输入的信息有误。
-                             </div>
+                             </div> -->
                              <div id="visirot-QR-code" class="visirot-QR-code"></div>
                              <div class="form-actions">
                                  <button id="get-visitor-key-button" type="button" class="btn blue"><i class="icon-ok"></i> 提交</button>
-                                 <button type="button" class="btn"><i class=" icon-remove"></i> x</button>
+                                 <button type="submit" class="btn"><i class=" icon-remove"></i> send</button>
                              </div>
                          </form>
                          <!-- END FORM-->
@@ -652,18 +652,47 @@ if (checkCookieAndSession()==1) {
   <!--common script for all pages-->
   <script src="js/common-scripts.js"></script>
   <script type="text/javascript">
-  $(document).ready(
-    function(){
-       $("#get-visitor-key-button").click(function(){
-           $.post("../request/getpost.php", $("#get-visitor-key").serialize());
-           $.post("../request/getpost.php", function(data) {
-             alert("Data Loaded: " + data);
-           });
-           $("#visirot-QR-code").html("<img src='http://qr.liantu.com/api.php?bg=ffffff&fg=92b37b&gc=1751a9&el=l&w=200&m=10&text=sacxac-xsaE'/>");
-           $("#visitor-key").val("DollyDuck");
-       })
-    }
-  );
+   //$(document).ready(
+  //   function(){
+  //      $("#get-visitor-key-button").click(function(){
+  //
+  //          $.post("../request/getpost.php",
+  //          {
+  //             community_code:"0n0.moex1101",
+  //             user-key:"Duckburg",
+  //           },
+  //          function(data,status){
+  //            alert("数据：" + data + "\n状态：" + status);
+  //          });
+  //
+  //         //  $.post("../request/getpost.php", $("#get-visitor-key").serialize());
+  //         //  $.post("../request/getpost.php", function(data) {
+  //         //    alert("Data Loaded: " + data);
+  //         //  });
+  //          $("#visirot-QR-code").html("<img src='http://qr.liantu.com/api.php?bg=ffffff&fg=92b37b&gc=1751a9&el=l&w=200&m=10&text=sacxac-xsaE'/>");
+  //          $("#visitor-key").val("DollyDuck");
+  //      })
+  //
+  //);
+  //
+  //
+
+        $(document).ready(function(){
+          $("#get-visitor-key-button").click(function(){
+            $.post("../request/getpost.php",
+            {
+              community_code:"DonaldDuck",
+              city:"Duckburg"
+            },
+            function(data,status){
+              alert("数据：" + data + "\n状态：" + status);
+              var parsedJson = $.parseJSON(data);
+              //document.getElementById("fname").innerHTML=obj.employees[1].firstName
+              $("#visitor-key").val(parsedJson.authcode);
+            });
+          });
+        });
+
   </script>
   <!--script for this page only-->
   <!-- END JAVASCRIPTS -->
