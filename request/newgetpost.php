@@ -29,7 +29,7 @@ function generate_key( $length = 16 ) {
     // 密码字符集，可任意添加你需要的字符
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-    $password = '';
+    $password = '';user_key
     for ( $i = 0; $i < $length; $i++ )
     {
         // 这里提供两种字符获取方式
@@ -43,13 +43,13 @@ function generate_key( $length = 16 ) {
 }
 
 $community_code = getConnunityCode();
-echo "$community_code";
+// echo "$community_code";
  $str = $community_code;
- if (isset($_POST['user-key'])) {
-   $key = $_POST["user-key"];
-   echo "$key";
+ if (isset($_POST['user_key'])) {
+   $key = $_POST["user_key"];
+   // echo "$key";
  }else {
-   $key = "ejbbvCjK6qNexmD";
+   $key = "NoKeyNexmD";
  }
 link_database();
 $sql = "select * from user where USER_KEY = '$key'";
@@ -61,29 +61,30 @@ $db_community_code = $row['ADDRESS'];
 $row = mysql_fetch_array($name2);
 if(""!=$key){
   if ($db_community_code == $community_code){
-      $string1 = json_encode(array("code"=>1, "des"=>"success"));
-      echo($string1);
-      echo('<script>console.log("登录成功")</script>');
-      session_start();
-      echo "欢迎来自".$username."的访客";
       $visitor_key = generate_key(32);
-      echo "您的访客码：".$visitor_key."\n";
       $visitor_key_hash = password_hash("$visitor_key", PASSWORD_DEFAULT);
       $create_time = date("y-m-d h:i:s");
       $end_time = date('y-m-d h:i:s', strtotime('+7 days'));
       $add_visitor_key = mysql_query("INSERT INTO verify (UID, VERIFY_KEY, START_TIME,END_TIME) VALUES ('$userid', '$visitor_key_hash', '$create_time','$end_time')");
+      $verify_id = mysql_insert_id();
+      $string1 = json_encode(array("code"=>1, "des"=>"success","vid"=>"$verify_id","vcode"=>"$visitor_key"));
+      echo($string1);
+      // echo('<script>console.log("登录成功")</script>');
+      // session_start();
+      // echo "欢迎来自".$username."的访客";
+      // echo "您的访客码：".$visitor_key."\n";
 
   }else {
     $logfalse = json_encode(array("code"=>0, "des"=>"false"));
-    echo($logfalse);
-    echo('<script>console.log("登录失败")</script>');
-    echo "登录失败！（请求的参数有误！）";
+    // echo($logfalse);
+    // echo('<script>console.log("登录失败")</script>');
+    // echo "登录失败！（请求的参数有误！）";
   }
 }else{
-  $logfalse = json_encode(array("code"=>0, "des"=>"false"));
+  $logfalse = json_encode(array("code"=>0, "des"=>"false","vid"=>"0","vcode"=>"0"));
   echo($logfalse);
-  echo('<script>console.log("email为空登录失败")</script>');
-  echo "登录失败！（用户名或密码不正确，请返回重新登录。）";
+  // echo('<script>console.log("email为空登录失败")</script>');
+  // echo "登录失败！（用户名或密码不正确，请返回重新登录。）";
 }
 
 

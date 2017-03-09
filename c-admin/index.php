@@ -491,23 +491,23 @@ if (checkCookieAndSession()==1) {
                              <div class="control-group">
                                  <label  class="control-label">您的地址码</label>
                                  <div class="controls">
-                                     <input name="community_code" type="text" value="<?php echo "$address"; ?>" class="input-xlarge" readonly="readonly"/>
+                                     <input id="community_code" name="community_code" type="text" value="<?php echo "$address"; ?>" class="input-xlarge" readonly="readonly"/>
 
                                  </div>
                              </div>
                              <div class="control-group">
                                  <label class="control-label">您的原始key</label>
                                  <div class="controls">
-                                     <input type="text" name="user-key" value="<?php echo "$userkey"; ?> " class="input-xxlarge" readonly="readonly"/>
+                                     <input type="text" id="user_key" name="user_key" value="<?php echo "$userkey"; ?> " class="input-xxlarge" readonly="readonly"/>
                                      <span class="help-inline">*您的私有密钥</span>
                                  </div>
                              </div>
                              <div class="control-group">
                                  <label id="test01"  class="control-label">您生成的访客key</label>
                                  <div class="controls">
-                                     <input id="visitor-key" type="text" placeholder="请点击提交来生成" class="input-xxlarge" />
+                                     <input id="visitor_key" type="text" placeholder="请点击提交来生成" class="input-xxlarge" />
 
-                                     <!-- <input type="text" id="visitor-key" value="Mickey Mouse"> -->
+                                     <!-- <input type="text" id="visitor_key" value="Mickey Mouse"> -->
                                      <span class="help-inline">您本周还有 <?php echo "$user_times"; ?> 次 生成机会</span>
                                  </div>
                              </div>
@@ -670,7 +670,7 @@ if (checkCookieAndSession()==1) {
   //         //    alert("Data Loaded: " + data);
   //         //  });
   //          $("#visirot-QR-code").html("<img src='http://qr.liantu.com/api.php?bg=ffffff&fg=92b37b&gc=1751a9&el=l&w=200&m=10&text=sacxac-xsaE'/>");
-  //          $("#visitor-key").val("DollyDuck");
+  //          $("#visitor_key").val("DollyDuck");
   //      })
   //
   //);
@@ -679,16 +679,21 @@ if (checkCookieAndSession()==1) {
 
         $(document).ready(function(){
           $("#get-visitor-key-button").click(function(){
-            $.post("../request/getpost.php",
+            var communitycode = $("#community_code").val();
+            var userkey = $("#user_key").val();
+
+            $.post("../request/newgetpost.php",
             {
-              community_code:"DonaldDuck",
-              city:"Duckburg"
+              community_code:communitycode,
+              user_key:userkey,
+
+              null:"Duckburg",
             },
             function(data,status){
               alert("数据：" + data + "\n状态：" + status);
               var parsedJson = $.parseJSON(data);
               //document.getElementById("fname").innerHTML=obj.employees[1].firstName
-              $("#visitor-key").val(parsedJson.authcode);
+              $("#visitor_key").val(parsedJson.vcode);
             });
           });
         });
