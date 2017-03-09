@@ -505,7 +505,7 @@ if (checkCookieAndSession()==1) {
                              <div class="control-group">
                                  <label id="test01"  class="control-label">您生成的访客key</label>
                                  <div class="controls">
-                                     <input id="visitor_key" type="text" placeholder="请点击提交来生成" class="input-xxlarge" />
+                                     <input id="visitor_key" type="text" placeholder="请点击提交来生成" spellcheck="false" class="input-xxlarge" />
 
                                      <!-- <input type="text" id="visitor_key" value="Mickey Mouse"> -->
                                      <span class="help-inline">您本周还有 <?php echo "$user_times"; ?> 次 生成机会</span>
@@ -686,14 +686,19 @@ if (checkCookieAndSession()==1) {
             {
               community_code:communitycode,
               user_key:userkey,
-
-              null:"Duckburg",
             },
             function(data,status){
               alert("数据：" + data + "\n状态：" + status);
               var parsedJson = $.parseJSON(data);
               //document.getElementById("fname").innerHTML=obj.employees[1].firstName
+
               $("#visitor_key").val(parsedJson.vcode);
+              vidvcode = JSON.stringify({
+                  vid: parsedJson.vid,
+                  vcode: parsedJson.vcode
+              });
+              $("#visitor_key").val(vidvcode);
+
             });
           });
         });

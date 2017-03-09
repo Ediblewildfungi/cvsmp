@@ -35,7 +35,7 @@
       <br>
       <form class="" action="newgetpost.php" method="post">
         <textarea name="community_code"  class="input" >0n0.moex5304</textarea>
-        <textarea name="user-key"  class="input" >admin</textarea>
+        <textarea name="user_key"  class="input" >admin</textarea>
         <button type="submit" class="btn btn-default">生成访客用专属码</button>
       </form>
     </div>

@@ -29,7 +29,7 @@ function generate_key( $length = 16 ) {
     // 密码字符集，可任意添加你需要的字符
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-    $password = '';user_key
+    $password = '';
     for ( $i = 0; $i < $length; $i++ )
     {
         // 这里提供两种字符获取方式
@@ -75,8 +75,8 @@ if(""!=$key){
       // echo "您的访客码：".$visitor_key."\n";
 
   }else {
-    $logfalse = json_encode(array("code"=>0, "des"=>"false"));
-    // echo($logfalse);
+    $logfalse = json_encode(array("code"=>0, "des"=>"false","vid"=>"0","vcode"=>"0"));
+     echo($logfalse);
     // echo('<script>console.log("登录失败")</script>');
     // echo "登录失败！（请求的参数有误！）";
   }
