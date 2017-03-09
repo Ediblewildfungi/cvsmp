@@ -26,7 +26,7 @@ function whereCommunityForm ($code){
 }
 
 function verfityCode(){
-  $verfiy_coede = $_POST["verfiy_coede"];
+  $verfiy_coede = $_POST["verfiy_code"];
   $verfiy_id = $_POST["verfiy_id"];
   link_database();
   $sql = "select * from verify where VERIFY_ID = '$verfiy_id'";
@@ -36,19 +36,30 @@ function verfityCode(){
     $visitor_key_hash = $row['VERIFY_KEY'];
     if (password_verify($verfiy_coede, $visitor_key_hash)) {
         mysql_query("DELETE FROM verify WHERE VERIFY_ID='$verfiy_id'");
-        echo 'Password is valid!';
+        $logfalse = json_encode(array("code"=>1, "des"=>"success","address"=>"0"));
+        echo($logfalse);
+
     } else {
-        echo 'Invalid password.';
+        $logfalse = json_encode(array("code"=>0, "des"=>"false","address"=>"0"));
+        echo($logfalse);
     }
   }else {
-    echo 'Invalid password.';
+        $logfalse = json_encode(array("code"=>0, "des"=>"false","address"=>"0"));
+        echo($logfalse);
   }
 
 
 
 
 }
-verfityCode();
+
+if (isset($_POST["verfiy_code"])&&isset($_POST["verfiy_id"])) {
+  verfityCode();
+}else{
+  $logfalse = json_encode(array("code"=>0, "des"=>"false","address"=>"0"));
+  echo($logfalse);
+}
+
 
 
 

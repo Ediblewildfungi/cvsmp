@@ -522,7 +522,7 @@ if (checkCookieAndSession()==1) {
                              <div id="visirot-QR-code" class="visirot-QR-code"></div>
                              <div class="form-actions">
                                  <button id="get-visitor-key-button" type="button" class="btn blue"><i class="icon-ok"></i> 提交</button>
-                                 <button type="submit" class="btn"><i class=" icon-remove"></i> send</button>
+                                 <!-- <button type="submit" class="btn"><i class=" icon-remove"></i> send</button> -->
                              </div>
                          </form>
                          <!-- END FORM-->
@@ -531,12 +531,77 @@ if (checkCookieAndSession()==1) {
                  <!-- END SAMPLE FORM PORTLET-->
              </div>
          </div>
+
+
         <!--  管理员可见 部分 START-->
         <?php if( $user_group == 0 ) : ?>
+
+
+          <div class="row-fluid">
+              <div class="span12">
+                  <!-- BEGIN SAMPLE FORMPORTLET-->
+                  <div class="widget red">
+                      <div class="widget-title">
+                          <h4><i class="icon-ok"></i> 验证来访者key</h4>
+                          <span class="tools">
+                          <a href="javascript:;" class="icon-chevron-down"></a>
+                          <a href="javascript:;" class="icon-remove"></a>
+                          </span>
+                      </div>
+                      <div class="widget-body">
+                          <!-- BEGIN FORM-->
+                          <form id="get-visitor-key" action="../request/getpost.php"  class="form-horizontal" method="post">
+
+                            <div class="control-group">
+                                <label id="test01"  class="control-label">访客key VCODE</label>
+                                <div class="controls">
+                                    <input id="verify_visitor_key" type="text" placeholder="请输入VCODE" spellcheck="false" class="input-xxlarge" />
+
+                                    <!-- <input type="text" id="visitor_key" value="Mickey Mouse"> -->
+                                    <span class="help-inline">您本周还有 <?php echo "$user_times"; ?> 次 生成机会</span>
+                                </div>
+                            </div>
+                              <div class="control-group">
+                                  <label  class="control-label">您的地址码</label>
+                                  <div class="controls">
+                                      <input id="verify_community_code" name="community_code" type="text" value="abcdefg" class="input-xlarge" readonly="readonly"/>
+
+                                  </div>
+                              </div>
+                              <div class="control-group">
+                                  <label class="control-label">状态</label>
+                                  <div class="controls">
+                                      <input type="text" id="verify_status" name="user_key" value="有效/无效 " class="input-xxlarge" readonly="readonly"/>
+
+                                  </div>
+                              </div>
+
+
+                              <!-- <div class="alert alert-error">
+                                  <button class="close" data-dismiss="alert">×</button>
+                                  <strong>警告!</strong> 您输入的信息有误。
+                              </div> -->
+                              <div class="form-actions">
+                                  <button id="verify-visitor-key-button" type="button" class="btn blue"><i class="icon-ok"></i> 验证</button>
+                                  <button type="submit" class="btn"><i class=" icon-remove"></i> send</button>
+                              </div>
+                              <div id="verify_info" class="">
+
+                              </div>
+                          </form>
+                          <!-- END FORM-->
+                      </div>
+                  </div>
+                  <!-- END SAMPLE FORM PORTLET-->
+              </div>
+          </div>
+
+
+
          <div class="row-fluid">
              <div class="span12">
                  <!-- BEGIN SAMPLE FORMPORTLET-->
-                 <div class="widget green">
+                 <div class="widget purple">
                      <div class="widget-title">
                          <h4><i class=" icon-key"></i> 登记新用户</h4>
                          <span class="tools">
@@ -676,7 +741,7 @@ if (checkCookieAndSession()==1) {
   //);
   //
   //
-
+        //点击生成按钮时AJAX
         $(document).ready(function(){
           $("#get-visitor-key-button").click(function(){
             var communitycode = $("#community_code").val();
@@ -692,12 +757,49 @@ if (checkCookieAndSession()==1) {
               var parsedJson = $.parseJSON(data);
               //document.getElementById("fname").innerHTML=obj.employees[1].firstName
 
-              $("#visitor_key").val(parsedJson.vcode);
+              // $("#visitor_key").val(parsedJson.vcode);
               vidvcode = JSON.stringify({
                   vid: parsedJson.vid,
                   vcode: parsedJson.vcode
               });
               $("#visitor_key").val(vidvcode);
+
+            });
+          });
+        });
+        //点击验证按钮时AJAX
+        $(document).ready(function(){
+          $("#verify-visitor-key-button").click(function(){
+            var verify_visitor_key = $("#verify_visitor_key").val();
+            var parsedJson = $.parseJSON(verify_visitor_key);
+            var vid = parsedJson.vid;
+            var vcode = parsedJson.vcode;
+            // alert("id:"+vid+"code:"+vcode);
+            $.post("../verify/newgetpost.php",
+            {
+              verfiy_id:vid,
+              verfiy_code:vcode,
+            },
+            function(data,status){
+              // alert("数据：" + data + "\n状态：" + status);
+              var parsedJson = $.parseJSON(data);
+              //document.getElementById("fname").innerHTML=obj.employees[1].firstName
+
+              $("#visitor_key").val(parsedJson.vcode);
+              vidvcode = JSON.stringify({
+                  address: parsedJson.address,
+                  des: parsedJson.des
+              });
+              //$("#visitor_key").val(vidvcode);
+              $("#verify_community_code").val(parsedJson.address);
+              $("#verify_status").val(parsedJson.des);
+              if (parsedJson.code == 1) {
+                $("#verify_info").prepend('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button><strong>有效!</strong> 验证成功！</div>');
+              }else {
+                $("#verify_info").prepend('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button><strong>错误!!</strong> 验证失败！</div>');
+              }
+
+
 
             });
           });
