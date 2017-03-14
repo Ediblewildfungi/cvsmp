@@ -47,9 +47,10 @@ $community_code = getConnunityCode();
  $str = $community_code;
  if (isset($_POST['user_key'])) {
    $key = $_POST["user_key"];
-   // echo "$key";
+    // echo "0001";
  }else {
-   $key = "NoKeyNexmD";
+   $key = "";
+  //  echo "0002";
  }
 link_database();
 $sql = "select * from user where USER_KEY = '$key'";
@@ -81,7 +82,7 @@ if(""!=$key){
     // echo "登录失败！（请求的参数有误！）";
   }
 }else{
-  $logfalse = json_encode(array("code"=>0, "des"=>"false","vid"=>"0","vcode"=>"0"));
+  $logfalse = json_encode(array("code"=>0, "des"=>"false","vid"=>"01","vcode"=>"0"));
   echo($logfalse);
   // echo('<script>console.log("email为空登录失败")</script>');
   // echo "登录失败！（用户名或密码不正确，请返回重新登录。）";

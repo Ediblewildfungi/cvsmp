@@ -111,28 +111,8 @@ if (checkCookieAndSession()==1) {
                     </div>
                   </a>
                 </li>
-                <li>
-                  <a href="#">
-                    <div class="task-info">
-                      <div class="desc">手机开发进度</div>
-                      <div class="percent">87%</div>
-                    </div>
-                    <div class="progress progress-striped progress-info active no-margin-bot">
-                      <div class="bar" style="width: 87%;"></div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <div class="task-info">
-                      <div class="desc">手机App进度</div>
-                      <div class="percent">33%</div>
-                    </div>
-                    <div class="progress progress-striped progress-warning active no-margin-bot">
-                      <div class="bar" style="width: 33%;"></div>
-                    </div>
-                  </a>
-                </li>
+
+
                 <li>
                   <a href="#">
                     <div class="task-info">
@@ -329,13 +309,21 @@ if (checkCookieAndSession()==1) {
               <li><a class="" href="dropzone.html">文件上传</a></li>
             </ul>
           </li>
-          <li class="sub-menu"><a href="javascript:;" class=""><i class="icon-th"></i><span>数据表格</span><span class="arrow"></span></a>
+
+          <!-- 管理员可见 -->
+          <?php if( $user_group == 0 ) : ?>
+
+          <li class="sub-menu"><a href="javascript:;" class=""><i class="icon-th"></i><span>访客数据</span><span class="arrow"></span></a>
             <ul class="sub">
               <li><a class="" href="basic_table.html">简单表格</a></li>
               <li><a class="" href="dynamic_table.html">动态表格</a></li>
               <li><a class="" href="editable_table.html">可编辑表格</a></li>
             </ul>
           </li>
+          <?php endif; ?>
+          <!-- 管理员可见END -->
+
+
           <li class="sub-menu"><a href="javascript:;" class=""><i class="icon-fire"></i><span>Icon图标</span><span class="arrow"></span></a>
             <ul class="sub">
               <li><a class="" href="font_awesome.html">FontAwesome图标</a></li>
@@ -638,12 +626,23 @@ if (checkCookieAndSession()==1) {
                                  <label class="control-label">指定入住用户的小区</label>
                                  <div class="controls">
                                      <select class="input-large m-wrap" tabindex="1">
-                                         <option value="Category 1">某某大学</option>
-                                         <option value="Category 2">某某新区</option>
+                                         <option value="Category 1">某某新区</option>
+                                         <option value="Category 2">某某大学</option>
                                          <option value="Category 3">某某花园</option>
                                          <option value="Category 4">某某学院</option>
                                      </select>
+                                     <select class="input-large m-wrap" tabindex="1">
+                                         <option value="Category 1">1</option>
+                                         <option value="Category 2">2</option>
+                                         <option value="Category 3">3</option>
+                                         <option value="Category 4">4</option>
+                                         <option value="Category 5">5</option>
+                                         <option value="Category 6">6</option>
+                                         <option value="Category 7">7</option>
+                                     </select>
+                                     <input type="text" placeholder="101" class="input-large" />
                                  </div>
+
                              </div>
                              <div class="alert alert-error">
                                  <button class="close" data-dismiss="alert">×</button>
