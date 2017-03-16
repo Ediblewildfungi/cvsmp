@@ -65,8 +65,9 @@ if(""!=$key){
       $visitor_key = generate_key(32);
       $visitor_key_hash = password_hash("$visitor_key", PASSWORD_DEFAULT);
       $create_time = date("y-m-d h:i:s");
+      $status=0;
       $end_time = date('y-m-d h:i:s', strtotime('+7 days'));
-      $add_visitor_key = mysql_query("INSERT INTO verify (UID, VERIFY_KEY, START_TIME,END_TIME) VALUES ('$userid', '$visitor_key_hash', '$create_time','$end_time')");
+      $add_visitor_key = mysql_query("INSERT INTO verify (UID, VERIFY_KEY, START_TIME,END_TIME,STATUS) VALUES ('$userid', '$visitor_key_hash', '$create_time','$end_time','$status')");
       $verify_id = mysql_insert_id();
       $string1 = json_encode(array("code"=>1, "des"=>"success","vid"=>"$verify_id","vcode"=>"$visitor_key"));
       echo($string1);
@@ -82,7 +83,7 @@ if(""!=$key){
     // echo "登录失败！（请求的参数有误！）";
   }
 }else{
-  $logfalse = json_encode(array("code"=>0, "des"=>"false","vid"=>"01","vcode"=>"0"));
+  $logfalse = json_encode(array("code"=>0, "des"=>"false","vid"=>"0","vcode"=>"0"));
   echo($logfalse);
   // echo('<script>console.log("email为空登录失败")</script>');
   // echo "登录失败！（用户名或密码不正确，请返回重新登录。）";

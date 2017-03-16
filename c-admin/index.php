@@ -34,11 +34,12 @@ if (checkCookieAndSession()==1) {
   $userid = $row["UID"] ;
   $userkey = $row["USER_KEY"] ;
   $user_group = $row["USER_GROUP"] ;
+  $address = $row["ADDRESS"] ;
 
   $sql = "select * from user_info where UID = '$userid'";
   $name2 = mysql_query($sql);
   $row = mysql_fetch_array($name2);
-  $address = $row["ADDRESS"] ;
+
   $user_times = $row["USER_CONF1"] ;
 
   mysql_close();
@@ -73,7 +74,7 @@ if (checkCookieAndSession()==1) {
           <div class="icon-reorder tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
         <a class="brand" href="index.php">
-          <img src="img/logo.png" alt="Metro Lab" />
+          <img src="img/logo.png" alt="小区访客系统管理员" />
         </a>
         <a class="btn btn-navbar collapsed" id="main_menu_trigger" data-toggle="collapse" data-target=".nav-collapse">
           <span class="icon-bar"></span>
@@ -315,8 +316,8 @@ if (checkCookieAndSession()==1) {
 
           <li class="sub-menu"><a href="javascript:;" class=""><i class="icon-th"></i><span>访客数据</span><span class="arrow"></span></a>
             <ul class="sub">
-              <li><a class="" href="basic_table.html">简单表格</a></li>
-              <li><a class="" href="dynamic_table.html">动态表格</a></li>
+              <li><a class="" href="basic_table.html">社区数据</a></li>
+              <li><a class="" href="dynamic_table.php">实时数据</a></li>
               <li><a class="" href="editable_table.html">可编辑表格</a></li>
             </ul>
           </li>
@@ -342,10 +343,10 @@ if (checkCookieAndSession()==1) {
               <li><a href="google_map.html" class="">Google地图</a></li>
             </ul>
           </li>
-          <li class="sub-menu"><a href="javascript:;" class=""><i class="icon-file-alt"></i><span>基本页面</span><span class="arrow"></span></a>
+          <li class="sub-menu"><a href="javascript:;" class=""><i class="icon-file-alt"></i><span>社区动态</span><span class="arrow"></span></a>
             <ul class="sub">
               <li><a class="" href="blank.html">空白页面</a></li>
-              <li><a class="" href="blog.html">博客</a></li>
+              <li><a class="" href="blog.html">社区新闻</a></li>
               <li><a class="" href="timeline.html">时间轴</a></li>
               <li><a class="" href="profile.html">个人资料</a></li>
               <li><a class="" href="about_us.html">关于我们</a></li>

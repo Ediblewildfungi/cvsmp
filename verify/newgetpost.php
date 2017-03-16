@@ -34,9 +34,21 @@ function verfityCode(){
   $row = mysql_fetch_array($name2);
   if (isset($row['VERIFY_KEY']) ) {
     $visitor_key_hash = $row['VERIFY_KEY'];
-    if (password_verify($verfiy_coede, $visitor_key_hash)) {
-        mysql_query("DELETE FROM verify WHERE VERIFY_ID='$verfiy_id'");
-        $logfalse = json_encode(array("code"=>1, "des"=>"success","address"=>"0"));
+    $status = $row['STATUS'];
+    $uid = $row['UID'];
+    if (password_verify($verfiy_coede, $visitor_key_hash) && $status=="0") {
+        // mysql_query("DELETE FROM verify WHERE VERIFY_ID='$verfiy_id'");
+        $use_time = date("y-m-d h:i:s");
+        mysql_query("UPDATE verify SET STATUS = '1'
+        WHERE VERIFY_ID = '$verfiy_id' ");
+        mysql_query("UPDATE verify SET END_TIME = '$use_time'
+        WHERE VERIFY_ID = '$verfiy_id' ");
+        $sql = "select * from user where UID = '$uid'";
+        $name2 = mysql_query($sql);
+        $row = mysql_fetch_array($name2);
+        $address = $row['ADDRESS'];
+
+        $logfalse = json_encode(array("code"=>1, "des"=>"success","address"=>"$address"));
         echo($logfalse);
 
     } else {
@@ -48,9 +60,6 @@ function verfityCode(){
         echo($logfalse);
   }
 
-
-
-
 }
 
 if (isset($_POST["verfiy_code"])&&isset($_POST["verfiy_id"])) {
@@ -59,16 +68,6 @@ if (isset($_POST["verfiy_code"])&&isset($_POST["verfiy_id"])) {
   $logfalse = json_encode(array("code"=>0, "des"=>"false","address"=>"0"));
   echo($logfalse);
 }
-
-
-
-
-
-
-
-
-
-
 
 
  ?>
