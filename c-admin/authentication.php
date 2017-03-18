@@ -1,11 +1,9 @@
 <?php
 
 require_once("../auth/config.php");
+require_once("/include/include.php");
 // 链接数据库
-function link_database(){
-  $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
-  mysql_select_db(DBNAME);
-}
+
 // 检测cookie
 function checkCookieAndSession (){
   if(isset($_COOKIE['username'])&&isset($_COOKOE['password'])){

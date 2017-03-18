@@ -1,26 +1,8 @@
 ﻿<?php
 require_once("../auth/config.php");
+require_once("/include/include.php");
+require_once("/include/checkCookieAndSession.php");
 
-function link_database(){
-  $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
-  mysql_select_db(DBNAME);
-}
-function checkCookieAndSession (){
-  $username = $_COOKIE['username'];
-  if(isset($_COOKIE['username'])){
-    return  "1";
-  //  echo '<script>console.log("登录1")</script>';
-
-  }else {
-    # code...
-    echo "<script>location.href='login.html';</script>";
-    return  "0";
-  //  echo '<script>console.log("登录2")</script>';
-    # echo "<script>location.href='login.html';</script>";
-
-  }
-}
-checkCookieAndSession();
 if (checkCookieAndSession()==1) {
   link_database();
   $username = $_COOKIE['username'];

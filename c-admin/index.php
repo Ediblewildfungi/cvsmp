@@ -2,28 +2,9 @@
 
 # $link_id = mysql_connect($DBHOST,$DBUSER,$DBPWD);
 require_once("../auth/config.php");
+require_once("/include/include.php");
+require_once("/include/checkCookieAndSession.php");
 
-function link_database(){
-  $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
-  mysql_select_db(DBNAME);
-}
-
-function checkCookieAndSession (){
-  $username = $_COOKIE['username'];
-  if(isset($_COOKIE['username'])){
-    return  "1";
-  //  echo '<script>console.log("登录1")</script>';
-
-  }else {
-    # code...
-    echo "<script>location.href='login.html';</script>";
-    return  "0";
-  //  echo '<script>console.log("登录2")</script>';
-    # echo "<script>location.href='login.html';</script>";
-
-  }
-}
-checkCookieAndSession();
 if (checkCookieAndSession()==1) {
   link_database();
   $username = $_COOKIE['username'];
@@ -547,7 +528,7 @@ if (checkCookieAndSession()==1) {
                                     <input id="verify_visitor_key" type="text" placeholder="请输入VCODE" spellcheck="false" class="input-xxlarge" />
 
                                     <!-- <input type="text" id="visitor_key" value="Mickey Mouse"> -->
-                                    <span class="help-inline">您本周还有 <?php echo "$user_times"; ?> 次 生成机会</span>
+
                                 </div>
                             </div>
                               <div class="control-group">
@@ -605,15 +586,16 @@ if (checkCookieAndSession()==1) {
                              <div class="control-group">
                                  <label class="control-label">姓名</label>
                                  <div class="controls">
-                                     <input type="text" placeholder="输新入住用户的姓名。" class="input-large" />
+                                     <input id="set_user_fullname" name="fullname" type="text" placeholder="输新入住用户的姓名。" class="input-large" />
                                      <span class="help-inline">*输新入住用户的姓名。</span>
                                  </div>
                              </div>
                              <div class="control-group">
-                                 <label class="control-label">设置密码</label>
+                                 <label class="control-label">设置用户key</label>
                                  <div class="controls">
-                                     <input type="text" placeholder="输新入住用户的初始密码。" class="input-xlarge" />
-                                     <span class="help-inline">*输新入住用户的初始密码。</span>
+                                     <input id="set_userkey"  type="text" placeholder="设置用户key" class="input-xlarge" />
+
+                                     <button id="set_userkey_button" type="button" class="btn"><i class="icon-sort-by-attributes"></i>随机生成</button>
                                  </div>
                              </div>
                              <div class="control-group">
@@ -626,22 +608,28 @@ if (checkCookieAndSession()==1) {
                              <div class="control-group">
                                  <label class="control-label">指定入住用户的小区</label>
                                  <div class="controls">
-                                     <select class="input-large m-wrap" tabindex="1">
-                                         <option value="Category 1">某某新区</option>
-                                         <option value="Category 2">某某大学</option>
-                                         <option value="Category 3">某某花园</option>
-                                         <option value="Category 4">某某学院</option>
+                                     <select id="set_community_code" name="set_community_code" class="input-large m-wrap" tabindex="1" onchange="changeCommunity(this.value)">
+                                       <option  value="">请选择社区</option>
+                                       <?php
+                                       link_database();
+                                       $sql="select * from community";
+                                       $result=mysql_query($sql);
+                                       while($row=mysql_fetch_array($result))  //遍历SQL语句执行结果把值赋给数组
+                                       {
+                                        echo '<option value="'.$row["community_code"].'">';
+                                        echo $row["community_name"];
+                                        echo "</option>";
+                                       }
+                                       mysql_close();
+                                        ?>
                                      </select>
-                                     <select class="input-large m-wrap" tabindex="1">
-                                         <option value="Category 1">1</option>
-                                         <option value="Category 2">2</option>
-                                         <option value="Category 3">3</option>
-                                         <option value="Category 4">4</option>
-                                         <option value="Category 5">5</option>
-                                         <option value="Category 6">6</option>
-                                         <option value="Category 7">7</option>
+
+                                     <select id="community_building" class="input-large m-wrap" tabindex="1">
+
+                                        <option  value="">请选择社区</option>
+
                                      </select>
-                                     <input type="text" placeholder="101" class="input-large" />
+                                     <input id="community_room" type="text" placeholder="101" class="input-large" />
                                  </div>
 
                              </div>
@@ -650,7 +638,7 @@ if (checkCookieAndSession()==1) {
                                  <strong>警告!</strong> 您输入的授权码有误。
                              </div>
                              <div class="form-actions">
-                                 <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
+                                 <button id="add_community_user" type="button" class="btn blue"><i class="icon-ok"></i> 添加用户</button>
                                  <button type="button" class="btn"><i class=" icon-remove"></i> x</button>
                              </div>
                          </form>
@@ -798,14 +786,109 @@ if (checkCookieAndSession()==1) {
               }else {
                 $("#verify_info").prepend('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button><strong>错误!!</strong> 验证失败！</div>');
               }
-
-
-
             });
           });
         });
 
+
+        //随机字符串
+        function _getRandomString(len) {
+            len = len || 32;
+            var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; // 默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
+            var maxPos = $chars.length;
+            var pwd = '';
+            for (i = 0; i < len; i++) {
+                pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+            }
+            return pwd;
+        }
+        //点击生成key时
+        $(document).ready(function(){
+          $("#set_userkey_button").click(function(){
+            //var set_userkey = ;
+            $("#set_userkey").val(_getRandomString(16));
+          });
+        });
   </script>
+
+  <script>
+  //单元楼数量
+function changeCommunity(str)
+{
+    if (str=="")
+    {
+        document.getElementById("txtHint").innerHTML="";
+        return;
+    }
+    if (window.XMLHttpRequest)
+    {
+        // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {
+        // IE6, IE5 浏览器执行代码
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById("community_building").innerHTML=xmlhttp.responseText;
+        }
+    }
+    xmlhttp.open("GET","content/get_community_name.php?q="+str,true);
+    xmlhttp.send();
+}
+</script>
+
+<script type="text/javascript">
+
+//点击添加用户时
+$(document).ready(function(){
+  $("#add_community_user").click(function(){
+    var set_user_fullname  = $("#set_user_fullname").val();
+    var set_userkey        = $("#set_userkey").val();
+    var set_community_code = $("#set_community_code").val();
+    var community_building = $("#community_building").val();
+    var community_room     = $("#community_room").val();
+    // alert("id:"+vid+"code:"+vcode);
+    $.post("concent/create_new_user.php",
+    {
+      fullname:set_user_fullname,
+      set_userkey:set_userkey,
+      set_community_code:set_community_code,
+      community_building:community_building,
+      community_room:community_room
+
+    },
+    function(data,status){
+      // alert("数据：" + data + "\n状态：" + status);
+      var parsedJson = $.parseJSON(data);
+      //document.getElementById("fname").innerHTML=obj.employees[1].firstName
+
+      $("#visitor_key").val(parsedJson.vcode);
+      vidvcode = JSON.stringify({
+          address: parsedJson.address,
+          des: parsedJson.des
+      });
+      //$("#visitor_key").val(vidvcode);
+      $("#verify_community_code").val(parsedJson.address);
+      $("#verify_status").val(parsedJson.des);
+      if (parsedJson.code == 1) {
+        $("#verify_info").prepend('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button><strong>有效!</strong> 验证成功！</div>');
+      }else {
+        $("#verify_info").prepend('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button><strong>错误!!</strong> 验证失败！</div>');
+      }
+    });
+  });
+});
+
+</script>
+
+
+
+
   <!--script for this page only-->
   <!-- END JAVASCRIPTS -->
 </body>
