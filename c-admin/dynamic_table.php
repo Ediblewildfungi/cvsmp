@@ -509,7 +509,7 @@ if (checkCookieAndSession()==1) {
             </div>
             <!-- END PAGE HEADER-->
             <!-- BEGIN ADVANCED TABLE widget-->
-            <?php if( $user_group == 0 ) : ?>
+            <?php if( $user_group == 0 || $user_group == 1) : ?>
             <div class="row-fluid">
                 <div class="span12">
                 <!-- BEGIN EXAMPLE TABLE widget-->

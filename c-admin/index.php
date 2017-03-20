@@ -293,7 +293,7 @@ if (checkCookieAndSession()==1) {
           </li>
 
           <!-- 管理员可见 -->
-          <?php if( $user_group == 0 ) : ?>
+          <?php if( $user_group == 0 ||$user_group == 1 ) : ?>
 
           <li class="sub-menu"><a href="javascript:;" class=""><i class="icon-th"></i><span>访客数据</span><span class="arrow"></span></a>
             <ul class="sub">
@@ -504,7 +504,7 @@ if (checkCookieAndSession()==1) {
 
 
         <!--  管理员可见 部分 START-->
-        <?php if( $user_group == 0 ) : ?>
+        <?php if( $user_group == 0|| $user_group ==1 ) : ?>
 
 
           <div class="row-fluid">
@@ -598,18 +598,19 @@ if (checkCookieAndSession()==1) {
                                      <button id="set_userkey_button" type="button" class="btn"><i class="icon-sort-by-attributes"></i>随机生成</button>
                                  </div>
                              </div>
-                             <div class="control-group">
+                             <!-- <div class="control-group">
                                  <label class="control-label">授权码</label>
                                  <div class="controls">
                                      <input type="text" placeholder="输入管理员的授权码" class="input-xxlarge" />
                                      <span class="help-inline">*输入管理员的授权码。</span>
                                  </div>
-                             </div>
+                             </div> -->
                              <div class="control-group">
                                  <label class="control-label">指定入住用户的小区</label>
                                  <div class="controls">
                                      <select id="set_community_code" name="set_community_code" class="input-large m-wrap" tabindex="1" onchange="changeCommunity(this.value)">
                                        <option  value="">请选择社区</option>
+                                       <?php if( $user_group == 0) : ?>
                                        <?php
                                        link_database();
                                        $sql="select * from community";
@@ -622,6 +623,29 @@ if (checkCookieAndSession()==1) {
                                        }
                                        mysql_close();
                                         ?>
+                                       <?php endif; ?>
+                                       <?php if( $user_group == 1) : ?>
+                                         <?php
+                                         link_database();
+                                         //$sql="select * from community";
+                                         //$sql = "select * from verify where VERIFY_ID = '$verfiy_id'";
+                                         $sql = "select * from user where USERNAME = '$username'";
+                                         $name2 = mysql_query($sql);
+                                         $row = mysql_fetch_array($name2);
+                                         $cid = $row['community_id'];
+                                         $sql = "select * from community where community_id = '$cid'";
+                                         $name2 = mysql_query($sql);
+                                         $row = mysql_fetch_array($name2);
+                                         $community_name = $row['community_name'];
+                                         //$result=mysql_query($sql);
+
+                                          echo '<option value="'.$row["community_code"].'">';
+                                          echo $row["community_name"];
+                                          echo "</option>";
+
+                                         mysql_close();
+                                          ?>
+                                       <?php endif; ?>
                                      </select>
 
                                      <select id="community_building" class="input-large m-wrap" tabindex="1">
@@ -633,15 +657,14 @@ if (checkCookieAndSession()==1) {
                                  </div>
 
                              </div>
-                             <div class="alert alert-error">
-                                 <button class="close" data-dismiss="alert">×</button>
-                                 <strong>警告!</strong> 您输入的授权码有误。
-                             </div>
+
                              <div class="form-actions">
                                  <button id="add_community_user" type="button" class="btn blue"><i class="icon-ok"></i> 添加用户</button>
                                  <button type="button" class="btn"><i class=" icon-remove"></i> x</button>
                              </div>
                          </form>
+                         <div id="create_newuser_info">
+                         </div>
                          <!-- END FORM-->
                      </div>
                  </div>
@@ -852,8 +875,8 @@ $(document).ready(function(){
     var set_community_code = $("#set_community_code").val();
     var community_building = $("#community_building").val();
     var community_room     = $("#community_room").val();
-    // alert("id:"+vid+"code:"+vcode);
-    $.post("concent/create_new_user.php",
+    alert("fullname:"+set_user_fullname +" code:"+set_userkey );
+    $.post("content/create_new_user.php",
     {
       fullname:set_user_fullname,
       set_userkey:set_userkey,
@@ -863,22 +886,23 @@ $(document).ready(function(){
 
     },
     function(data,status){
+      alert("数据：" + data + "\n状态：" + status);
       // alert("数据：" + data + "\n状态：" + status);
       var parsedJson = $.parseJSON(data);
       //document.getElementById("fname").innerHTML=obj.employees[1].firstName
 
       $("#visitor_key").val(parsedJson.vcode);
       vidvcode = JSON.stringify({
-          address: parsedJson.address,
+          // address: parsedJson.address,
           des: parsedJson.des
       });
       //$("#visitor_key").val(vidvcode);
       $("#verify_community_code").val(parsedJson.address);
       $("#verify_status").val(parsedJson.des);
       if (parsedJson.code == 1) {
-        $("#verify_info").prepend('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button><strong>有效!</strong> 验证成功！</div>');
+        $("#create_newuser_info").prepend('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button><strong>有效!</strong> 添加成功！</div>');
       }else {
-        $("#verify_info").prepend('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button><strong>错误!!</strong> 验证失败！</div>');
+        $("#create_newuser_info").prepend('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button><strong>错误!!</strong> 添加失败！</div>');
       }
     });
   });

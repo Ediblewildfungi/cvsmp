@@ -18,9 +18,10 @@ $user_password = $_POST['user_password'];
 $sql = "select * from user where USERNAME = '$username'";
 $name2 = mysql_query($sql);
 $row = mysql_fetch_array($name2);
+$user_password_hash = $row["USE_PWD"];
 
 if(""!=$username){
-  if ($row["USE_PWD"] == $user_password){
+  if (password_verify($user_password, $user_password_hash)){
       $string1 = json_encode(array("code"=>1, "des"=>"success"));
       echo($string1);
       echo('<script>console.log("登录成功")</script>');

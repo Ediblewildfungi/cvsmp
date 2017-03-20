@@ -5,7 +5,7 @@ require_once("../include/include.php");
 $q = isset($_GET["q"]) ? $_GET["q"]: '';
 
 if(empty($q)) {
-    echo '请选择一个网站';
+    echo "请选择";
     exit;
 }
 
@@ -22,7 +22,8 @@ $building_number = $row["building"] + 1;
 //echo "$row[building]" ;
 
 for ($i=1; $i  < $building_number; $i++) {
-  echo "<option value='".$i."'>".$i."</option>";
+  $bn = str_pad($i,2,"0",STR_PAD_LEFT);
+  echo "<option value='".$bn."'>".$bn."</option>";
 }
 
 
