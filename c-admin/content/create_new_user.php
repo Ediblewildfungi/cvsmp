@@ -1,6 +1,6 @@
 <?php
 require_once("../../auth/config.php");
-require_once(".../include/include.php");
+require_once("../include/include.php");
 
 
 
