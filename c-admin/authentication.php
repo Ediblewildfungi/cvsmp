@@ -1,7 +1,7 @@
 <?php
 
 require_once("../auth/config.php");
-require_once("/include/include.php");
+require_once("./include/include.php");
 // 链接数据库
 
 // 检测cookie
