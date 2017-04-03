@@ -3,7 +3,9 @@
 
 function link_database(){
   $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
+//  $link_id=mysqli_connect(DBHOST,DBUSER,DBPWD);
   mysql_select_db(DBNAME);
+
 }
 
 // 随机字符串生成

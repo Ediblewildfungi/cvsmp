@@ -3,7 +3,7 @@
 # $link_id = mysql_connect($DBHOST,$DBUSER,$DBPWD);
 require_once("../auth/config.php");
 require_once("./include/include.php");
-require_once("/include/checkCookieAndSession.php");
+require_once("./include/checkCookieAndSession.php");
 
 if (checkCookieAndSession()==1) {
   link_database();
