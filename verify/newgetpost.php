@@ -3,7 +3,6 @@ require_once("../auth/config.php");
 function link_database(){
   $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
   mysql_select_db(DBNAME);
-  mysql_query("SET NAMES UTF8");
 }
 
 function whereCommunityForm ($code){
@@ -49,8 +48,23 @@ function verfityCode(){
         $row = mysql_fetch_array($name2);
         $address = $row['ADDRESS'];
 
-        $logfalse = json_encode(array("code"=>1, "des"=>"success","address"=>"$address"));
-        echo($logfalse);
+
+        // 姓名
+        $sql = "select * from user_info where UID = '$uid'";
+        $name2 = mysql_query($sql);
+        $row = mysql_fetch_array($name2);
+        $user_fullname = $row['FULL_NAME'];
+        $user_community = $row['COMMUNITY'];
+        $user_building = $row['BUILDING'];
+        $user_room = $row['ROOM'];
+        //小区
+        $sql = "select * from community where community_code = '$user_community'";
+        $name2 = mysql_query($sql);
+        $row = mysql_fetch_array($name2);
+        $user_community_chs = $row['community_name'];
+
+        $logsuccess = json_encode(array("code"=>1, "des"=>"success","fullname"=>"$user_fullname","address"=>"$address","community"=>"$user_community_chs","building"=>"$user_building","room"=>"$user_room"));
+        echo($logsuccess);
 
     } else {
         $logfalse = json_encode(array("code"=>0, "des"=>"false","address"=>"0"));
