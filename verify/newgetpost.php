@@ -3,6 +3,7 @@ require_once("../auth/config.php");
 function link_database(){
   $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
   mysql_select_db(DBNAME);
+  mysql_query("SET NAMES UTF8");
 }
 
 function whereCommunityForm ($code){
