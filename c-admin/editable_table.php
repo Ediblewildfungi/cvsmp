@@ -1,3 +1,24 @@
+<?php
+# $link_id = mysql_connect($DBHOST,$DBUSER,$DBPWD);
+require_once("../auth/config.php");
+require_once("./include/include.php");
+require_once("./include/checkCookieAndSession.php");
+if (checkCookieAndSession()==1) {
+  link_database();
+  $username = $_COOKIE['username'];
+  $sql = "select * from user where USERNAME = '$username'";
+  $name2 = mysql_query($sql);
+  $row = mysql_fetch_array($name2);
+  $user_group = $row["USER_GROUP"] ;
+  if (isset($_GET["pass_request"])) {
+    $update_uid = $_GET["pass_request"];
+    mysql_query("UPDATE user SET USER_GROUP = '2'
+    WHERE UID = '$update_uid' ");
+    mysql_close();
+  }
+}
+
+ ?>
 ﻿<!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
@@ -5,7 +26,7 @@
 <!-- BEGIN HEAD -->
 <head>
    <meta charset="utf-8" />
-   <title>小区访客管理系统 可编辑表格 - 功能测试</title>
+   <title>小区访客管理系统 用户审核 - 功能测试</title>
    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
    <meta content="" name="description" />
    <meta content="" name="author" />
@@ -310,7 +331,7 @@
                       <ul class="sub">
                           <li><a class="" href="basic_table.html">社区数据</a></li>
                           <li><a class="" href="dynamic_table.php">实时数据</a></li>
-                          <li class="active"><a class="" href="editable_table.html">用户数据</a></li>
+                          <li class="active"><a class="" href="editable_table.php">用户数据</a></li>
                       </ul>
                   </li>
 
@@ -411,7 +432,7 @@
                      <!-- BEGIN EXAMPLE TABLE widget-->
                      <div class="widget purple">
                          <div class="widget-title">
-                             <h4><i class="icon-reorder"></i> 用户数据</h4>
+                             <h4><i class="icon-reorder"></i> 用户申请数据</h4>
                             <span class="tools">
                                 <a href="javascript:;" class="icon-chevron-down"></a>
                                 <a href="javascript:;" class="icon-remove"></a>
@@ -436,114 +457,52 @@
                                      </div>
                                  </div>
                                  <div class="space15"></div>
-                                 <table class="table table-striped table-hover table-bordered" id="editable-sample">
+
+                                 <table class="table table-striped table-hover table-bordered" id="userdata">
                                      <thead>
                                      <tr>
-                                         <th>Username</th>
-                                         <th>Full Name</th>
-                                         <th>Points</th>
-                                         <th>Notes</th>
-                                         <th>Edit</th>
-                                         <th>Delete</th>
+
+                                         <th></th>
+                                         <th>UID</th>
+                                         <th>username</th>
+                                         <th>E-Mail</th>
+                                         <th>申请人姓名</th>
+                                         <th>操作</th>
                                      </tr>
                                      </thead>
                                      <tbody>
-                                     <tr class="">
-                                         <td>Jondi Rose</td>
-                                         <td>Alfred Jondi Rose</td>
-                                         <td>1234</td>
-                                         <td class="center">super user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Dulal</td>
-                                         <td>Jonathan Smith</td>
-                                         <td>434</td>
-                                         <td class="center">new user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Sumon</td>
-                                         <td> Sumon Ahmed</td>
-                                         <td>232</td>
-                                         <td class="center">super user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>vectorlab</td>
-                                         <td>dk mosa</td>
-                                         <td>132</td>
-                                         <td class="center">elite user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Admin</td>
-                                         <td> Admin lab</td>
-                                         <td>462</td>
-                                         <td class="center">new user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Rafiqul</td>
-                                         <td>Rafiqul dulal</td>
-                                         <td>62</td>
-                                         <td class="center">new user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Jhon Doe</td>
-                                         <td>Jhon Doe </td>
-                                         <td>1234</td>
-                                         <td class="center">super user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Dulal</td>
-                                         <td>Jonathan Smith</td>
-                                         <td>434</td>
-                                         <td class="center">new user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Sumon</td>
-                                         <td> Sumon Ahmed</td>
-                                         <td>232</td>
-                                         <td class="center">super user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>vectorlab</td>
-                                         <td>dk mosa</td>
-                                         <td>132</td>
-                                         <td class="center">elite user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Admin</td>
-                                         <td> Admin lab</td>
-                                         <td>462</td>
-                                         <td class="center">new user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
-                                     <tr class="">
-                                         <td>Rafiqul</td>
-                                         <td>Rafiqul dulal</td>
-                                         <td>62</td>
-                                         <td class="center">new user</td>
-                                         <td><a class="edit" href="javascript:;">Edit</a></td>
-                                         <td><a class="delete" href="javascript:;">Delete</a></td>
-                                     </tr>
+                                       <?php
+                                       link_database();
+                                       $sql="select * from user where USER_GROUP = '3'";
+                                       $result=mysql_query($sql);
+                                       while($row=mysql_fetch_array($result))  //遍历SQL语句执行结果把值赋给数组
+                                       {
+                                        echo '<tr class="">';
+                                        echo '<td><input type="checkbox" class="checkboxes" value="1" /></td>';
+                                        echo "<td id='pass_uid'>".$row["UID"]."</td>";
+                                        echo "<td>".$row["USERNAME"]." </td>";
+                                        echo "<td>".$row["EMAIL"]." </td>";
+                                        $uid = $row["UID"];
+                                        $findFulname="select * from user_info where UID = '$uid'";
+                                        $resultFulname=mysql_query($findFulname);
+                                        $rowFulname = mysql_fetch_array($resultFulname);
+                                        echo "<td>".$rowFulname["FULL_NAME"]." </td>";
+                                        echo "<td>";
+                                        echo '<a href="./editable_table.php?pass_request='.$uid.'" id="pass_request"><span class="label label-hover label-success">通过</span></a>';
+                                        echo '<a  href="javascript:;"><span class="label label-hover label-warning">保留</span></a>';
+                                        echo '<a href="#" id="refuse_request"><span class="label label-hover label-inverse">拒绝</span></a>';
+                                        echo "</td>";
+
+                                        // echo '<td><span class="label label-success">'.$row["START_TIME"]."</span></td>";
+                                        // echo '<td><span class="label label-success">'.$row["END_TIME"]." </span></td>";
+                                        // if ($row["STATUS"] == 0) {
+                                        //   echo '<td><span class="label label-warning">未使用 </span></td>';
+                                        // }else {
+                                        //   echo '<td><span class="label label-inverse">已失效 </span></td>';
+                                        // }
+                                        // echo "<td>".$row["STATUS"]." </td>";
+                                        echo "</tr>";
+                                       } ?>
                                      </tbody>
                                  </table>
                              </div>
@@ -554,6 +513,80 @@
              </div>
 
             <!-- END 用户数据 widget-->
+
+
+            <!--  -->
+            <div class="row-fluid">
+                <div class="span12">
+                    <!-- BEGIN EXAMPLE TABLE widget-->
+                    <div class="widget purple">
+                        <div class="widget-title">
+                            <h4><i class="icon-reorder"></i> 用户详细数据</h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                               <a href="javascript:;" class="icon-remove"></a>
+                           </span>
+                        </div>
+                        <div class="widget-body">
+                            <div>
+                                <div class="space15"></div>
+
+                                <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                                    <thead>
+                                    <tr>
+
+                                        <th></th>
+                                        <th>UID</th>
+                                        <th>username</th>
+                                        <th>E-Mail</th>
+                                        <th>姓名</th>
+                                        <th>住址</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                      <?php
+                                      link_database();
+                                      $sql="select * from user where USER_GROUP = '2'";
+                                      $result=mysql_query($sql);
+                                      while($row=mysql_fetch_array($result))  //遍历SQL语句执行结果把值赋给数组
+                                      {
+                                       echo '<tr class="">';
+                                       echo '<td><input type="checkbox" class="checkboxes" value="1" /></td>';
+                                       echo "<td id='pass_uid'>".$row["UID"]."</td>";
+                                       echo "<td>".$row["USERNAME"]." </td>";
+                                       echo "<td>".$row["EMAIL"]." </td>";
+                                       $uid = $row["UID"];
+                                       $address = $row["ADDRESS"];
+                                       $findFulname="select * from user_info where UID = '$uid'";
+                                       $resultFulname=mysql_query($findFulname);
+                                       $rowFulname = mysql_fetch_array($resultFulname);
+                                       echo "<td>".$rowFulname["FULL_NAME"]." </td>";
+                                       echo "<td>";
+                                       echo "$address";
+                                       echo "</td>";
+
+                                       // echo '<td><span class="label label-success">'.$row["START_TIME"]."</span></td>";
+                                       // echo '<td><span class="label label-success">'.$row["END_TIME"]." </span></td>";
+                                       // if ($row["STATUS"] == 0) {
+                                       //   echo '<td><span class="label label-warning">未使用 </span></td>';
+                                       // }else {
+                                       //   echo '<td><span class="label label-inverse">已失效 </span></td>';
+                                       // }
+                                       // echo "<td>".$row["STATUS"]." </td>";
+                                       echo "</tr>";
+                                      } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END EXAMPLE TABLE widget-->
+                </div>
+            </div>
+            <!--  -->
+
+
+
          </div>
          <!-- END PAGE CONTAINER-->
       </div>
@@ -596,6 +629,9 @@
            EditableTable.init();
        });
    </script>
+
+
+
 </body>
 <!-- END BODY -->
 </html>

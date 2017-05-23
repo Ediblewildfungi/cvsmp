@@ -22,6 +22,11 @@ if ($status != 0) {
 
   //echo $community;
   $user_default_pwd = password_hash("$community", PASSWORD_DEFAULT);
+  if (isset($_POST['set_password'])) {
+    $set_password = $_POST['set_password'];
+    $user_default_pwd = password_hash("$set_password", PASSWORD_DEFAULT);
+  }
+
   link_database();
   $sql_check = "SELECT * FROM user WHERE username = '$community' ";
   $sql_check_query = mysql_query($sql_check);
@@ -39,8 +44,14 @@ if ($status != 0) {
     $row = mysql_fetch_array($name2);
     $community_id = $row["community_id"];
     //echo $community_id;
-    $add_user = mysql_query("INSERT INTO user ( USERNAME, USE_PWD,USER_KEY,ADDRESS,community_id,CREATE_TIME,USER_GROUP) VALUES ('$community', '$user_default_pwd', '$userkey','$community','$community_id','$create_time','2')");
+    $add_user = mysql_query("INSERT INTO user ( USERNAME, USE_PWD,USER_KEY,ADDRESS,community_id,CREATE_TIME,USER_GROUP) VALUES ('$community', '$user_default_pwd', '$userkey','$community','$community_id','$create_time','3')");
     $userid = mysql_insert_id();
+    if (isset($_POST["user_email"])) {
+      $useremail = $_POST["user_email"];
+      mysql_query("UPDATE user SET EMAIL = '$useremail'
+      WHERE UID = '$userid' ");
+    }
+
 
     $add_user_info = mysql_query("INSERT INTO user_info (UID, ADDRESS, COMMUNITY,BUILDING,ROOM,FULL_NAME,USER_CONF1) VALUES ('$userid', '$community','$community_code','$community_building','$community_room', '$fullname','30')");
     mysql_close();

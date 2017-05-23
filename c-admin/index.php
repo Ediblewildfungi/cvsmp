@@ -261,7 +261,7 @@ if (checkCookieAndSession()==1) {
         </div>
         <ul class="sidebar-menu">
           <li class="sub-menu active"><a class="" href="index.php"><i class="icon-dashboard"></i><span>控制台</span></a></li>
-          
+
 
 
           <!-- 管理员可见 -->
@@ -271,7 +271,7 @@ if (checkCookieAndSession()==1) {
             <ul class="sub">
               <li><a class="" href="basic_table.html">社区数据</a></li>
               <li><a class="" href="dynamic_table.php">实时数据</a></li>
-              <li><a class="" href="editable_table.html">可编辑表格</a></li>
+              <li><a class="" href="editable_table.php">用户审核</a></li>
             </ul>
           </li>
           <li class="sub-menu"><a class="" href="javascript:;"><i class="icon-map-marker"></i><span>地图</span><span class="arrow"></span></a>
@@ -780,7 +780,8 @@ if (checkCookieAndSession()==1) {
                 $("#verify_info").prepend('<div class="alert alert-success"><button class="close" data-dismiss="alert">×</button><strong>有效!</strong> 验证成功！</div>');
               }else {
                 $("#verify_info").prepend('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button><strong>错误!!</strong> 验证失败！</div>');
-              }
+              };
+
             });
           });
         });

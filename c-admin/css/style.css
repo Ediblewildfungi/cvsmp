@@ -4595,3 +4595,34 @@ margin-right: 21px;
 .d-sel-filter span {
     margin-right: 10px;
 }
+.label-success:hover{
+  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #21f375, 0 0 35px #2aa214, 0 0 40px #1a790e, 0 0 50px #4CAF50, 0 0 75px #4CAF50;
+  transition: box-shadow 0.5s;
+ -moz-transition: box-shadow 0.5s;
+ -webkit-transition: box-shadow 0.5;	/* Safari 和 Chrome */
+ -o-transition: box-shadow 0.5s;	/* Opera */
+}
+.label-warning:hover{
+  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fcb322, 0 0 35px #fcb322, 0 0 40px #fcb322, 0 0 50px #fcb322, 0 0 75px #FFC107;
+  transition: box-shadow 0.5s;
+ -moz-transition: box-shadow 0.5s;
+ -webkit-transition: box-shadow 0.5;	/* Safari 和 Chrome */
+ -o-transition: box-shadow 0.5s;	/* Opera */
+}
+.label-inverse:hover{
+  box-shadow: 0 0 5px #fff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #ffffff, 0 0 35px #F44336, 0 0 40px #F44336, 0 0 50px #F44336, 0 0 75px #F44336;
+  transition: box-shadow 0.5s;
+ -moz-transition: box-shadow 0.5s;
+ -webkit-transition: box-shadow 0.5;	/* Safari 和 Chrome */
+ -o-transition: box-shadow 0.5s;	/* Opera */
+}
+.label-hover {
+  box-shadow: 0px 0px 0px #674141;
+  transition: box-shadow 0.5s;
+ -moz-transition: box-shadow 0.5s;
+ -webkit-transition: box-shadow 0.5;	/* Safari 和 Chrome */
+ -o-transition: box-shadow 0.5s;	/* Opera */
+}
+.label-success :hover {
+    box-shadow: 1px 1px 4px #000;
+}

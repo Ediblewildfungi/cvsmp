@@ -3,6 +3,7 @@ require_once("../auth/config.php");
 function link_database(){
   $link_id=mysql_connect(DBHOST,DBUSER,DBPWD);
   mysql_select_db(DBNAME);
+  mysql_query("SET NAMES UTF8");
 }
 
 function whereCommunityForm ($code){
@@ -36,17 +37,26 @@ function verfityCode(){
     $visitor_key_hash = $row['VERIFY_KEY'];
     $status = $row['STATUS'];
     $uid = $row['UID'];
+    $endtime = $row['END_TIME'];
+
     if (password_verify($verfiy_coede, $visitor_key_hash) && $status=="0") {
         // mysql_query("DELETE FROM verify WHERE VERIFY_ID='$verfiy_id'");
         $use_time = date("y-m-d h:i:s");
-        mysql_query("UPDATE verify SET STATUS = '1'
-        WHERE VERIFY_ID = '$verfiy_id' ");
-        mysql_query("UPDATE verify SET END_TIME = '$use_time'
-        WHERE VERIFY_ID = '$verfiy_id' ");
-        $sql = "select * from user where UID = '$uid'";
-        $name2 = mysql_query($sql);
-        $row = mysql_fetch_array($name2);
-        $address = $row['ADDRESS'];
+        $use_time2 =date('Y-m-d H:i:s', time());
+        if ($endtime < $use_time2) {
+          $logfalse = json_encode(array("code"=>3, "des"=>"false","address"=>"0"));
+          echo($logfalse);
+        }else{
+          mysql_query("UPDATE verify SET STATUS = '1'
+          WHERE VERIFY_ID = '$verfiy_id' ");
+          mysql_query("UPDATE verify SET END_TIME = '$use_time'
+          WHERE VERIFY_ID = '$verfiy_id' ");
+          $sql = "select * from user where UID = '$uid'";
+          $name2 = mysql_query($sql);
+          $row = mysql_fetch_array($name2);
+          $address = $row['ADDRESS'];
+
+
 
 
         // 姓名
@@ -65,7 +75,11 @@ function verfityCode(){
 
         $logsuccess = json_encode(array("code"=>1, "des"=>"success","fullname"=>"$user_fullname","address"=>"$address","community"=>"$user_community_chs","building"=>"$user_building","room"=>"$user_room"));
         echo($logsuccess);
+      }
 
+    } elseif ($status==1) {
+      $logfalse = json_encode(array("code"=>2, "des"=>"false","address"=>"0"));
+      echo($logfalse);
     } else {
         $logfalse = json_encode(array("code"=>0, "des"=>"false","address"=>"0"));
         echo($logfalse);
